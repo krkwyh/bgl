@@ -129,13 +129,6 @@ int main()
 	VertexDescriptor snk = vertex(8, g);
 #endif
 
-	//std::cout << "out_edges(v0): { ";
-	//typedef boost::graph_traits<Graph>::out_edge_iterator::value_type OutEdge;
-	//BOOST_FOREACH(OutEdge const& e, out_edges(vertex(0, g), g)) {
-	//	std::cout << "v" << get(boost::vertex_index, g, target(e, g)) << ", ";
-	//}
-	//std::cout << "\b\b }" << std::endl;
-
 	auto const flow = boost::boykov_kolmogorov_max_flow(g, src, snk);
 
 	std::cout << "flow: " << flow << std::endl;

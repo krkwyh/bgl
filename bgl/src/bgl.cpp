@@ -96,7 +96,6 @@ int main()
 		add_vertex(g);
 	}
 
-	//typedef boost::graph_traits<Graph>::vertices_size_type VerticesSize;
 	typedef boost::property_value<VertexProperty, boost::vertex_index_t>::type VertexIndex;
 	typedef boost::property_value<EdgeProperty, boost::edge_capacity_t>::type EdgeCapacity;
 

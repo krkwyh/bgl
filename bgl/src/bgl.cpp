@@ -133,12 +133,6 @@ int main()
 
 	std::cout << "flow: " << flow << std::endl;
 
-	// グラフ g に関する vertex_color のプロパティマップをつくり、
-	// そのプロパティマップから頂点 v の vertex_color を get するs
-	//typedef boost::property_map<Graph, boost::vertex_color_t>::type ColorMap;
-	//ColorMap color_map(&g);
-	//get(color_map, v);
-
 	BOOST_FOREACH(VertexDescriptor v, vertices(g)) {
 		auto const index = get(boost::vertex_index, g, v);
 		auto const color = get(boost::vertex_color, g, v);

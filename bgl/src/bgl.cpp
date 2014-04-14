@@ -96,7 +96,6 @@ int main()
 		add_vertex(g);
 	}
 
-	//typedef boost::graph_traits<Graph>::vertices_size_type VerticesSize;
 	typedef boost::property_value<VertexProperty, boost::vertex_index_t>::type VertexIndex;
 	typedef boost::property_value<EdgeProperty, boost::edge_capacity_t>::type EdgeCapacity;
 
@@ -130,22 +129,9 @@ int main()
 	VertexDescriptor snk = vertex(8, g);
 #endif
 
-	//std::cout << "out_edges(v0): { ";
-	//typedef boost::graph_traits<Graph>::out_edge_iterator::value_type OutEdge;
-	//BOOST_FOREACH(OutEdge const& e, out_edges(vertex(0, g), g)) {
-	//	std::cout << "v" << get(boost::vertex_index, g, target(e, g)) << ", ";
-	//}
-	//std::cout << "\b\b }" << std::endl;
-
 	auto const flow = boost::boykov_kolmogorov_max_flow(g, src, snk);
 
 	std::cout << "flow: " << flow << std::endl;
-
-	// グラフ g に関する vertex_color のプロパティマップをつくり、
-	// そのプロパティマップから頂点 v の vertex_color を get するs
-	//typedef boost::property_map<Graph, boost::vertex_color_t>::type ColorMap;
-	//ColorMap color_map(&g);
-	//get(color_map, v);
 
 	BOOST_FOREACH(VertexDescriptor v, vertices(g)) {
 		auto const index = get(boost::vertex_index, g, v);

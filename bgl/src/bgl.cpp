@@ -54,6 +54,7 @@ int main()
 	//           (6)--<1.0>--(7)--<5.0>--(8) <- sink
 	//                  *
 
+#if 0
 	VertexDescriptor v0 = add_vertex(g);
 	VertexDescriptor v1 = add_vertex(g);
 	VertexDescriptor v2 = add_vertex(g);
@@ -88,15 +89,49 @@ int main()
 	add_bidirectional_edge(v2, v5, 7.0);
 	add_bidirectional_edge(v5, v8, 6.0);
 
-	auto const flow = boost::boykov_kolmogorov_max_flow(g, v0, v8);
+	VertexDescriptor src = v0;
+	VertexDescriptor snk = v8;
+#else
+	for (int i = 0; i < 9; ++i) {
+		add_vertex(g);
+	}
+
+	typedef boost::property_value<VertexProperty, boost::vertex_index_t>::type VertexIndex;
+	typedef boost::property_value<EdgeProperty, boost::edge_capacity_t>::type EdgeCapacity;
+
+	auto add_bidirectional_edge = [&](VertexIndex s_idx, VertexIndex t_idx, EdgeCapacity cap) {
+		VertexDescriptor s = vertex(s_idx, g);
+		VertexDescriptor t = vertex(t_idx, g);
+
+		EdgeDescriptor fwd = add_edge(s, t, g).first;
+		put(boost::edge_capacity, g, fwd, cap);
+
+		EdgeDescriptor rev = add_edge(t, s, g).first;
+		put(boost::edge_capacity, g, rev, cap);
+
+		put(boost::edge_reverse, g, fwd, rev);
+		put(boost::edge_reverse, g, rev, fwd);
+	};
+	add_bidirectional_edge(0, 1, 5.0);
+	add_bidirectional_edge(1, 2, 1.0);
+	add_bidirectional_edge(3, 4, 4.0);
+	add_bidirectional_edge(4, 5, 1.0);
+	add_bidirectional_edge(6, 7, 1.0);
+	add_bidirectional_edge(7, 8, 5.0);
+	add_bidirectional_edge(0, 3, 5.0);
+	add_bidirectional_edge(3, 6, 5.0);
+	add_bidirectional_edge(1, 4, 6.0);
+	add_bidirectional_edge(4, 7, 1.0);
+	add_bidirectional_edge(2, 5, 7.0);
+	add_bidirectional_edge(5, 8, 6.0);
+
+	VertexDescriptor src = vertex(0, g);
+	VertexDescriptor snk = vertex(8, g);
+#endif
+
+	auto const flow = boost::boykov_kolmogorov_max_flow(g, src, snk);
 
 	std::cout << "flow: " << flow << std::endl;
-
-	// グラフ g に関する vertex_color のプロパティマップをつくり、
-	// そのプロパティマップから頂点 v の vertex_color を get するs
-	//typedef boost::property_map<Graph, boost::vertex_color_t>::type ColorMap;
-	//ColorMap color_map(&g);
-	//get(color_map, v);
 
 	BOOST_FOREACH(VertexDescriptor v, vertices(g)) {
 		auto const index = get(boost::vertex_index, g, v);
